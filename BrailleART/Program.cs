@@ -11,7 +11,7 @@ namespace BrailleART
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Unicode;
-            string photo = "IMG_2383.jpg";
+            string photo = "images.jpg";
             Bitmap b = new Bitmap(photo);
            
             int width = (int)(Math.Ceiling((float) b.Width / 2.0));
@@ -19,17 +19,20 @@ namespace BrailleART
             int[] intensityhist = new int[256];
             int count = 0;
             float intensity;
+            float ii = 0;
             for (int x=0; x< b.Width; x++)
             {
                 for (int y=0; y< b.Height; y++)
                 {
                     var i = b.GetPixel(x, y).GetBrightness();
                     intensityhist[ i >= 1.0 ? (int)255 : (int)(i * 256.0)]++;
+                    ii = ii + i;
                     count++;
                 }
 
             }
             intensity = intensityhist.ToList().IndexOf(intensityhist.Max()) / (float)256.0;
+            ii = ii / count;
             using (System.IO.StreamWriter file =  new System.IO.StreamWriter(@"output.html",true))
             {
                 file.WriteLine($"<html><body style='font-size:5;'><img src='{photo}'><pre>");
@@ -45,7 +48,7 @@ namespace BrailleART
                             {
                                 if (!(x >= b.Width || y >= b.Height))
                                 {
-                                    if (b.GetPixel(x, y).GetBrightness() < intensity)
+                                     if (b.GetPixel(x, y).GetBrightness() > intensity && b.GetPixel(x, y).GetBrightness()<ii)
                                     {
                                         braille = braille + BrailleBit(y - (row * 4), x - (charno * 2));
                                     }
