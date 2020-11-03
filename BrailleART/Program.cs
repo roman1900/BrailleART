@@ -11,7 +11,7 @@ namespace BrailleART
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Unicode;
-            string photo = "images.jpg";
+            string photo = "IMG_2383.jpg";
             Bitmap b = new Bitmap(photo);
            
             int width = (int)(Math.Ceiling((float) b.Width / 2.0));
